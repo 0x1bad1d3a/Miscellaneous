@@ -1,0 +1,12 @@
+The server and client are both written in python3 so the command to execute
+the servers and client will be:
+
+>python3 server.py -m <min players> -l <lobby timeout> -t <play timeout>
+>python3 client.py -s <server> -p <port> -n <name> -[a or m]
+
+If no arguments are provided the default arguments will be used.
+
+Both the server and the client implements the curses CLI library, type !help
+to see the list of implemented commands on both the server and the client.
+
+https://www.youtube.com/watch?v=YbsLnteH1DY
