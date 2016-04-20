@@ -1,0 +1,40 @@
+﻿<Window x:Class="program_4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Las Meninas" Width="500" Height="615" ResizeMode="CanMinimize" Closed="Window_Closed">
+    <Grid x:Name="window">
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open">
+                        <MenuItem x:Name="_mitem1" Header="Margarita Teresa" Click="MenuItem_Click" />
+                        <MenuItem x:Name="_mitem2" Header="Maria Agustina Sarmiento" Click="MenuItem_Click" />
+                        <MenuItem x:Name="_mitem3" Header="Diego Velazquez" Click="MenuItem_Click" />
+                        <MenuItem x:Name="_mitem4" Header="Isabel de Velasco" Click="MenuItem_Click" />
+                        <MenuItem x:Name="_mitem5" Header="Maria Barbola" Click="MenuItem_Click" />
+                        <MenuItem x:Name="_mitem6" Header="Nicolas Pertusato" Click="MenuItem_Click" />
+                        <MenuItem x:Name="_mitem7" Header="Don Jose Nieto Velazquez" Click="MenuItem_Click" />
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="_Exit" Click="MenuItem_Click_Exit" />
+                </MenuItem>
+                <MenuItem Header="_Window">
+                    <MenuItem Header="_Cascade" Click="MenuItem_Click_Cascade" />
+                    <MenuItem Header="Title Horizontal" Click="MenuItem_Click_Title_Horizontal" />
+                    <MenuItem Header="Title Vertical" Click="MenuItem_Click_Title_Vertical" />
+                </MenuItem>
+                <MenuItem Header="_About">
+                    <MenuItem Header="_About" Click="MenuItem_Click_About" />
+                </MenuItem>
+            </Menu>
+            <Image Source="Resources/las_meninas.jpg" Width="493" Height="568" DockPanel.Dock="Top" Panel.ZIndex="1"/>
+        </DockPanel>
+        <Rectangle x:Name="_rec1" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30" Margin="224,381,0,0" Opacity="0.1" MouseEnter="Rectangle_MouseEnter" StrokeThickness="0.5" Panel.ZIndex="10" MouseLeave="Rectangle_MouseLeave" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+        <Rectangle x:Name="_rec2" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30" Margin="161,378,0,0" Opacity="0.1" MouseEnter="Rectangle_MouseEnter" StrokeThickness="0.5" Panel.ZIndex="10" MouseLeave="Rectangle_MouseLeave" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+        <Rectangle x:Name="_rec3" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30" Margin="106,301,0,0" Opacity="0.1" MouseEnter="Rectangle_MouseEnter" StrokeThickness="0.5" Panel.ZIndex="10" MouseLeave="Rectangle_MouseLeave" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+        <Rectangle x:Name="_rec4" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30" Margin="294,338,0,0" Opacity="0.1" MouseEnter="Rectangle_MouseEnter" StrokeThickness="0.5" Panel.ZIndex="10" MouseLeave="Rectangle_MouseLeave" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+        <Rectangle x:Name="_rec5" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30" Margin="400,368,0,0" Opacity="0.1" MouseEnter="Rectangle_MouseEnter" StrokeThickness="0.5" Panel.ZIndex="10" MouseLeave="Rectangle_MouseLeave" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+        <Rectangle x:Name="_rec6" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30" Margin="447,402,0,0" Opacity="0.1" MouseEnter="Rectangle_MouseEnter" StrokeThickness="0.5" Panel.ZIndex="10" MouseLeave="Rectangle_MouseLeave" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+        <Rectangle x:Name="_rec7" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="30" Stroke="Black" VerticalAlignment="Top" Width="30" Margin="275,309,0,0" Opacity="0.1" MouseEnter="Rectangle_MouseEnter" StrokeThickness="0.5" Panel.ZIndex="10" MouseLeave="Rectangle_MouseLeave" MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+    </Grid>
+</Window>

@@ -1,0 +1,112 @@
+﻿<Window x:Class="program_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Cliff House Ordering Thingy" Height="720" Width="720" MinWidth="720" MinHeight="540" MaxWidth="720">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <TextBlock Name="receiptdisplay" Padding="10" FontFamily="Courier New" TextWrapping="Wrap" Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sagittis malesuada lorem, quis finibus purus tristique luctus. Fusce ut elit erat. Nullam bibendum erat vel vestibulum sodales. Aliquam posuere dolor mauris, vel fringilla quam rutrum ac. Pellentesque laoreet cursus felis id maximus. Donec luctus nulla id elit gravida, a ullamcorper massa ullamcorper. Suspendisse nec placerat nulla. Aenean pulvinar turpis sed commodo fermentum. Phasellus in urna at nisl commodo sollicitudin. In feugiat tortor eget dui fringilla, sit amet sagittis mauris hendrerit. Cras et suscipit libero. Maecenas euismod neque justo, hendrerit pulvinar sem pellentesque nec. Pellentesque eu dignissim leo. Aliquam erat volutpat."/>
+            </ScrollViewer>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Clear Bill" Width="100" Height="20" Click="Button_Click_1" />
+                <Button Grid.Column="1" Content="Print Bill" Width="100" Height="20" Click="Button_Click" />
+            </Grid>
+        </Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Visible" Grid.Column="1">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <TextBlock TextWrapping="Wrap" Text="The Cliff House Restaurant" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
+                    <DockPanel Width="300" Margin="0,10">
+                        <TextBlock Width="220" Text="Please Enter Your Table Number (1-99):"/>
+                        <TextBox Name="table_textbox" Width="80" HorizontalAlignment="Right" LostFocus="table_textbox_LostFocus"></TextBox>
+                    </DockPanel>
+                </StackPanel>
+                <Grid Margin="0,10" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="10" TextWrapping="Wrap" Text="STARTERS" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Name="sp_starters" Grid.Column="1" Orientation="Vertical">
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,10" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="10" TextWrapping="Wrap" Text="SALAD &amp; SOUP" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Name="sp_saladandsoup" Grid.Column="1" Orientation="Vertical">
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,10" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="10" TextWrapping="Wrap" Text="PASTA" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Name="sp_pasta" Grid.Column="1" Orientation="Vertical">
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,10" Grid.Row="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="10" TextWrapping="Wrap" Text="STEAKS" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Name="sp_steaks" Grid.Column="1" Orientation="Vertical">
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,10" Grid.Row="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="10" TextWrapping="Wrap" Text="SEAFOOD" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Name="sp_seafood" Grid.Column="1" Orientation="Vertical">
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,10" Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="10" TextWrapping="Wrap" Text="CHICKEN" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Name="sp_chicken" Grid.Column="1" Orientation="Vertical">
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,10" Grid.Row="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Margin="10" TextWrapping="Wrap" Text="DESSERTS" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold"/>
+                    <StackPanel Name="sp_dessert" Grid.Column="1" Orientation="Vertical">
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

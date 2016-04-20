@@ -1,0 +1,10 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="program_final.MainWindow"
+        Title="Walking Sucks" SizeToContent="WidthAndHeight" ResizeMode="NoResize" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+    <Canvas x:Name="canvas" Height="768" Width="1024" MouseRightButtonUp="Canvas_MouseRightButtonUp">
+        <Image x:Name="screen_map" Source="Resources/map.png" Stretch="UniformToFill" Panel.ZIndex="-1" />
+    </Canvas>
+</Window>
