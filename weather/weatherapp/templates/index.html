@@ -1,0 +1,9 @@
+{% if history_list %}
+    <ul>
+    {% for h in history_list %}
+        <li>{{ h }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No history available.</p>
+{% endif %}
