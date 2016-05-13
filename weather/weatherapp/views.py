@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from .models import History
 
 import requests
+import datetime
 
 @login_required(login_url='/weatherapp/accounts/login/')
 def index(request):
@@ -12,6 +13,7 @@ def index(request):
     location = request.POST['location'] if 'location' in request.POST else None
     mapJson = None
     weatherJson = None
+    dateAndWeather = []
 
     if location:
 
@@ -26,6 +28,8 @@ def index(request):
             weatherUri = 'https://api.forecast.io/forecast/beec74efaeee64d55513d049112d385b/{},{}'.format(lat, lng)
             weatherJson = requests.get(weatherUri).json()
 
+            dateAndWeather = getWeather(weatherJson)
+
         h = History(user=request.user, search_history=location, search_result=mapJson)
         h.save()
 
@@ -35,20 +39,14 @@ def index(request):
                 'history_list' : history_list,
                 'location' : location,
                 'mapJson' : mapJson,
-                'weatherJson' : weatherJson
+                'weatherJson' : weatherJson,
+                'temperature_list' : [x['temperatureMax'] for x in dateAndWeather],
+                'date_list' : [datetime.datetime.fromtimestamp(x['time']).strftime("%A") for x in dateAndWeather]
               }
     return render(request, 'index.html', context)
 
-def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None and user.is_active:
-        login(request, user)
-        return redirect('index')
-    else:
-        return HttpResponse("Error logging in")
+def getWeather(weatherJson):
 
-def search(request, location):
-    context = { 'location' : location }
-    return render(request, 'search.html', context)
+   dateAndWeather = [x for x in weatherJson['daily']['data']]
+
+   return dateAndWeather
