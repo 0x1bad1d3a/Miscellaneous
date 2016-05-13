@@ -14,6 +14,7 @@ def index(request):
     mapJson = None
     weatherJson = None
     dateAndWeather = []
+    coord = (47, -122)
 
     if location:
 
@@ -24,6 +25,7 @@ def index(request):
 
             lat = mapJson['results'][0]['geometry']['location']['lat']
             lng = mapJson['results'][0]['geometry']['location']['lng']
+            coord = (lat, lng)
 
             weatherUri = 'https://api.forecast.io/forecast/beec74efaeee64d55513d049112d385b/{},{}'.format(lat, lng)
             weatherJson = requests.get(weatherUri).json()
@@ -38,10 +40,13 @@ def index(request):
     context = {
                 'history_list' : history_list,
                 'location' : location,
+                'lat' : coord[0],
+                'lng' : coord[1],
                 'mapJson' : mapJson,
                 'weatherJson' : weatherJson,
-                'temperature_list' : [x['temperatureMax'] for x in dateAndWeather],
-                'date_list' : [datetime.datetime.fromtimestamp(x['time']).strftime("%A") for x in dateAndWeather]
+                'temperature_list_high' : [x['temperatureMax'] for x in dateAndWeather],
+                'temperature_list_low' : [x['temperatureMin'] for x in dateAndWeather],
+                'date_list' : [datetime.datetime.fromtimestamp(x['time']).strftime("%a %b/%d") for x in dateAndWeather]
               }
     return render(request, 'index.html', context)
 
