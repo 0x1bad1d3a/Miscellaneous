@@ -45,9 +45,16 @@
                 visibility: hidden;
             }
 
+            p.search_history_items {
+                margin: 0;
+                padding-top: 1em;
+                padding-left: 1em;
+                padding-right: 1em;
+            }
+            
             .weather_conditions {
                 bottom: 30%;
-                z-index:10;
+                z-index:5;
                 position:absolute;
                 width: 100%;
                 text-align: center;
@@ -73,6 +80,12 @@
         {% load staticfiles %}
         <script src="{% static "Chart.js" %}"></script>
         <script src="{% static "jquery-1.12.3.min.js" %}"></script>
+        <script>
+            var location_result = {{ location_result }};
+            if (location_result == 1){
+                alert("Couldn't find {{ location }}");
+            }
+        </script>
 
         <script>
             function showHistory(){
@@ -96,8 +109,7 @@
         </form>
         <div id="search_history">
             {% for h in history_list %}
-                {{ h.user }} {{ h.search_history }}
-                <br/>
+                <p class="search_history_items" {% if forloop.last %}style="padding-bottom: 1em"{% endif %}>{{ h.search_history }}</p>
             {% endfor %}
         </div>
 

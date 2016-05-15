@@ -32,21 +32,20 @@ def index(request):
     weatherJson = None
     dateAndWeather = []
     coord = getLocation(location)
-    weatherList = getWeather(coord[0], coord[1])
+    weatherList = getWeather(coord[1][0], coord[1][1])
 
     history_list = History.objects.filter(user=request.user).order_by('-id')[:10]
 
-    if location and dateAndWeather:
+    if coord[0] == 0 and weatherList:
         h = History(user=request.user, search_history=location, search_result=dateAndWeather)
         h.save()
 
     context = {
             'history_list' : history_list,
             'location' : location,
-            'lat' : coord[0],
-            'lng' : coord[1],
-            'mapJson' : mapJson,
-            'weatherJson' : weatherJson,
+            'location_result' : coord[0],
+            'lat' : coord[1][0],
+            'lng' : coord[1][1],
             'temperature_list_high' : [x.tempMax for x in weatherList],
             'temperature_list_low' : [x.tempMin for x in weatherList],
             'weather_conditions' : [{"date": x.time, "summary": x.summary} for x in weatherList],
@@ -55,6 +54,9 @@ def index(request):
 
     return render(request, 'index.html', context)
 
+# 0: Success
+# 1: Could not find search
+# 2: Input was null
 def getLocation(location):
 
     if location:
@@ -65,9 +67,11 @@ def getLocation(location):
         if mapJson['status'] == 'OK':
             lat = mapJson['results'][0]['geometry']['location']['lat']
             lng = mapJson['results'][0]['geometry']['location']['lng']
-            return (lat, lng)
+            return (0, (lat, lng))
+        else:
+            return(1, (47, -122))
 
-    return (47, -122)
+    return (2, (47, -122))
 
 def getWeather(lat, lng):
 
@@ -94,7 +98,6 @@ def getWeather(lat, lng):
                 weatherData.time = datetime.fromtimestamp(weatherData.time).strftime("%a %b/%d")
 
         return weatherList
-
 
     return None
 
