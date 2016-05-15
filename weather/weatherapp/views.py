@@ -3,9 +3,26 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import History
+from datetime import datetime
+from datetime import timedelta
 
 import requests
-import datetime
+
+weatherUri = 'https://api.forecast.io/forecast/beec74efaeee64d55513d049112d385b'
+
+class WeatherData:
+
+    def __init__(self, time, tempMax, tempMin, summary):
+        self.time = time
+        self.tempMax = tempMax
+        self.tempMin = tempMin
+        self.summary = summary
+
+    def __str__(self):
+        return 'time: {} | tempMax: {} | tempMin: {} | summary: {}'.format(self.time, self.tempMax, self.tempMin, self.summary)
+
+    def __repr__(self):
+        return self.__str__();
 
 @login_required(login_url='/weatherapp/accounts/login/')
 def index(request):
@@ -14,44 +31,87 @@ def index(request):
     mapJson = None
     weatherJson = None
     dateAndWeather = []
-    coord = (47, -122)
+    coord = getLocation(location)
+    weatherList = getWeather(coord[0], coord[1])
+
+    history_list = History.objects.filter(user=request.user).order_by('-id')[:10]
+
+    if location and dateAndWeather:
+        h = History(user=request.user, search_history=location, search_result=dateAndWeather)
+        h.save()
+
+    context = {
+            'history_list' : history_list,
+            'location' : location,
+            'lat' : coord[0],
+            'lng' : coord[1],
+            'mapJson' : mapJson,
+            'weatherJson' : weatherJson,
+            'temperature_list_high' : [x.tempMax for x in weatherList],
+            'temperature_list_low' : [x.tempMin for x in weatherList],
+            'weather_conditions' : [{"date": x.time, "summary": x.summary} for x in weatherList],
+            'date_list' : [x.time for x in weatherList]
+            }
+
+    return render(request, 'index.html', context)
+
+def getLocation(location):
 
     if location:
 
-        mapUri = 'https://maps.googleapis.com/maps/api/geocode/json?address={}&key=AIzaSyCLjAV18w2FPLa2z9vU2DgqK9cHe9h6J_s'.format(location)
-        mapJson = requests.get(mapUri).json()
+        mapGetUri = 'https://maps.googleapis.com/maps/api/geocode/json?address={}&key=AIzaSyCLjAV18w2FPLa2z9vU2DgqK9cHe9h6J_s'.format(location)
+        mapJson = requests.get(mapGetUri).json()
 
         if mapJson['status'] == 'OK':
-
             lat = mapJson['results'][0]['geometry']['location']['lat']
             lng = mapJson['results'][0]['geometry']['location']['lng']
-            coord = (lat, lng)
+            return (lat, lng)
 
-            weatherUri = 'https://api.forecast.io/forecast/beec74efaeee64d55513d049112d385b/{},{}'.format(lat, lng)
-            weatherJson = requests.get(weatherUri).json()
+    return (47, -122)
 
-            dateAndWeather = getWeather(weatherJson)
+def getWeather(lat, lng):
 
-        h = History(user=request.user, search_history=location, search_result=mapJson)
-        h.save()
+    weatherGetUri= '{}/{},{}'.format(weatherUri, lat, lng)
+    weatherReq = requests.get(weatherGetUri)
 
-    history_list = History.objects.order_by('-id')[:10]
+    if weatherReq.status_code == 200:
 
-    context = {
-                'history_list' : history_list,
-                'location' : location,
-                'lat' : coord[0],
-                'lng' : coord[1],
-                'mapJson' : mapJson,
-                'weatherJson' : weatherJson,
-                'temperature_list_high' : [x['temperatureMax'] for x in dateAndWeather],
-                'temperature_list_low' : [x['temperatureMin'] for x in dateAndWeather],
-                'date_list' : [datetime.datetime.fromtimestamp(x['time']).strftime("%a %b/%d") for x in dateAndWeather]
-              }
-    return render(request, 'index.html', context)
+        weatherJson = weatherReq.json()
+        weatherInfoList = [x for x in weatherJson['daily']['data']]
+        weatherList = []
 
-def getWeather(weatherJson):
+        for weatherInfo in weatherInfoList:
 
-   dateAndWeather = [x for x in weatherJson['daily']['data']]
+            weatherList.append(WeatherData(weatherInfo['time'], weatherInfo['temperatureMax'], weatherInfo['temperatureMin'], weatherInfo['summary']))
 
-   return dateAndWeather
+        today = weatherList[0].time
+        weatherList = [getWeatherAtTime(lat, lng, x) for x in getLastThreeDays(today)] + weatherList
+
+        for weatherData in weatherList:
+            if weatherData.time == today:
+                weatherData.time = "Today"
+            else:
+                weatherData.time = datetime.fromtimestamp(weatherData.time).strftime("%a %b/%d")
+
+        return weatherList
+
+
+    return None
+
+def getWeatherAtTime(lat, lng, time):
+
+    weatherGetUri = '{}/{},{},{}'.format(weatherUri, lat, lng, time)
+    weatherReq = requests.get(weatherGetUri)
+
+    if weatherReq.status_code == 200:
+
+        weatherJson = weatherReq.json()
+        weatherInfo = weatherJson['daily']['data'][0]
+        return WeatherData(weatherInfo['time'], weatherInfo['temperatureMax'], weatherInfo['temperatureMin'], weatherInfo['summary'])
+
+    return WeatherData(None, 0, 0, None)
+
+def getLastThreeDays(time):
+
+    dt = datetime.utcfromtimestamp(time)
+    return [int((dt - timedelta(days=x)).timestamp()) for x in [3, 2, 1]]

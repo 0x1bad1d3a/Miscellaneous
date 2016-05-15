@@ -38,6 +38,25 @@
                 background-color: white;
             }
 
+            #search_history {  
+                position: absolute;
+                background-color:white;
+                z-index: 10;
+                visibility: hidden;
+            }
+
+            .weather_conditions {
+                bottom: 30%;
+                z-index:10;
+                position:absolute;
+                width: 100%;
+                text-align: center;
+                padding-top: 0.5em;
+                padding-bottom: 0.5em;
+                background-color:white;
+                margin: 0 auto;
+            }
+
             .search_form {
                 position: absolute;
                 text-align: center;
@@ -53,12 +72,34 @@
 
         {% load staticfiles %}
         <script src="{% static "Chart.js" %}"></script>
+        <script src="{% static "jquery-1.12.3.min.js" %}"></script>
 
+        <script>
+            function showHistory(){
+                var searchBox = $('#search_box')[0];
+                var rect = searchBox.getBoundingClientRect();
+                var searchHistory = $('#search_history')[0];
+                searchHistory.style.top = rect.bottom;
+                searchHistory.style.left = rect.left;
+                searchHistory.style.width = rect.right - rect.left;
+                searchHistory.style.visibility = "visible";
+            }
+            function hideHistory(){
+                var searchHistory = $('#search_history')[0];
+                searchHistory.style.visibility = "hidden";
+            }
+        </script>
         <form action="{% url 'index' %}" method="post" class="search_form">
             {% csrf_token %}
-            <input type="text" name="location"/>
+            <input id="search_box" type="text" name="location" autocomplete="off" onfocus="showHistory()" onblur="hideHistory()"/>
             <button type="submit">Search</button>
         </form>
+        <div id="search_history">
+            {% for h in history_list %}
+                {{ h.user }} {{ h.search_history }}
+                <br/>
+            {% endfor %}
+        </div>
 
         <div id="map"></div>
         <script>
@@ -77,31 +118,46 @@
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 
+        <div class="weather_conditions">Hover over chart for weather description</div>
+
         <div id="weather_chart">
             <canvas id="weatherChart"></canvas>
         </div>
         <script>
+            var weather_conditions = {{ weather_conditions|safe }};
             var ctx = document.getElementById("weatherChart");
-            var myChart = new Chart(ctx, {
-                type: 'bar',
+            window.myChart = new Chart(ctx, {
+                type: 'line',
                 data: {
                     labels: {{ date_list|safe }},
                     datasets: [{
                         label: 'Temperature High',
-                        data: {{ temperature_list_high }} 
+                        data: {{ temperature_list_high }},
+                        backgroundColor: "rgba(0, 50, 100, 0.5)" 
                     },
                     {
                         label: 'Temperature Low',
-                        data: {{ temperature_list_low }}
+                        data: {{ temperature_list_low }},
+                        backgroundColor: "rgba(0, 0, 50, 0.5)"
                     }]
                 },
                 options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero:true
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        custom: function(tooltip){
+                            if (!tooltip){
+                                return;
                             }
-                        }]
+                            if (tooltip.body){
+                                var l = weather_conditions.filter(function(x){ if (x['date'] == tooltip.title) { return x}});
+                                if (l.length > 0){
+                                    l = l[0];
+                                    $('.weather_conditions')[0].innerHTML = tooltip.title + ' - ' + l['summary'];
+                                }
+                            }
+                        }
                     }
                 }
             });
